@@ -2,8 +2,11 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ChangeStatus;
+use App\Console\Commands\SendCampaign;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\NotifyCampaignCompletion;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -14,7 +17,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-
+        NotifyCampaignCompletion::class,
+        ChangeStatus::class,
+        SendCampaign::class,
 
     ];
 
@@ -25,7 +30,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
+        $schedule->command('campaign-completion')->daily();
+        $schedule->command('change-status')->daily();
+        $schedule->command('send-campaign')->daily();
     }
 
     /**
