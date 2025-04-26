@@ -72,5 +72,10 @@ class User extends Authenticatable
         return 'http://www.gravatar.com/avatar/'.md5($this->email).'fs=150';
     }
 
+    public function campaigns(): HasMany
+    {
+        return $this->hasMany(Campaign::class, 'owner_id');
+    }
+
 
 }
