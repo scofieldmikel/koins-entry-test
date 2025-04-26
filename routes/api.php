@@ -11,6 +11,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('forgot', [\App\Http\Controllers\Auth\ForgetPasswordController::class, 'resetPassword']);
     Route::post('change', [\App\Http\Controllers\Auth\ForgetPasswordController::class, 'changePassword']);
 
+    Route::group(['prefix' => 'webhook'], function () {
+        Route::post('paystack', [\App\Http\Controllers\Webhooks\PaystackWebhookController::class, 'handle'])->middleware('paystack');
+    });
+
     Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'dashboard'], function () {
@@ -46,6 +50,10 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('get-campaign-statuses', [\App\Http\Controllers\Campaign\StatusController::class, 'getCampaignStatus']);
             Route::get('get-campaign-status/{status}', [\App\Http\Controllers\Campaign\StatusController::class, 'getCampaignStatusDetails']);
             Route::put('update-campaign-status/{status}', [\App\Http\Controllers\Campaign\StatusController::class, 'updateCampaignStatus']);
+        });
+
+        Route::group(['prefix' => 'payment'], function () {
+            Route::post('/fund-campaign/{campaign}', [\App\Http\Controllers\Dashboard\PaymentController::class, 'fundCampaign']);
         });
 
         Route::post('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout']);

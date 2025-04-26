@@ -77,5 +77,9 @@ class User extends Authenticatable
         return $this->hasMany(Campaign::class, 'owner_id');
     }
 
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
 
 }
