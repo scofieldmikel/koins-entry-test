@@ -128,5 +128,12 @@ class PaystackWebhookController
         }
         $campaign->save();
 
+        $campaign->user->wallet()->updateOrCreate(
+            ['user_id' => $campaign->user->id],
+            [
+                'balance' => ($campaign->user->wallet->balance ?? 0) + $request['amount'] / 100,
+            ]
+        );
+
     }
 }

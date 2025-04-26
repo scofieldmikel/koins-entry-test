@@ -31,4 +31,12 @@ class PaymentController extends Controller
         ];
         return $this->paymentMethod($request->payment_type, $transaction, $user, $data);
     }
+
+    public function getUserBalance(Request $request)
+    {
+        $user = $request->user();
+        return $this->okResponse('User balance', [
+            'balance' => $user->wallet->balance ?? 0,
+        ]);
+    }
 }

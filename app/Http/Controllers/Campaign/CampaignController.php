@@ -148,7 +148,6 @@ class CampaignController extends Controller
         );
     }
 
-
     public function modifyLocation($campaign, ModifyCampaignRequest $request)
     {
         $campaign = Campaign::find($campaign);
@@ -183,6 +182,36 @@ class CampaignController extends Controller
         ]);
 
         return $this->okResponse('Location added successfully');
+    }
+
+    public function resumeCampaign($campaign)
+    {
+        $campaign = Campaign::find($campaign);
+
+        if (!$campaign) {
+            return $this->notFoundResponse('Campaign not found');
+        }
+
+        if ($campaign->status == CampaignController::fetchStatusId('Running')) {
+            return $this->badRequestResponse('Campaign is already running, you cannot update the status.');
+        }
+
+        if($campaign->end_date < now()) {
+            return $this->badRequestResponse('Campaign has already ended.');
+        }
+
+        if($campaign->status == CampaignController::fetchStatusId('Stopped') || $campaign->status == CampaignController::fetchStatusId('Paused')) {
+            $campaign->update([
+                'status' => CampaignController::fetchStatusId('Running'),
+            ]);
+
+            return $this->okResponse(
+                'Campaign status updated successfully.',
+                new CampaignResource($campaign->load(['locations', 'images']))
+            );
+        }
+
+        return $this->badRequestResponse('Campaign is not in a state that can be resumed.');
     }
 
 }

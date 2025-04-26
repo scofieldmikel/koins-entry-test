@@ -36,6 +36,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::put('/update-campaign/{campaign}', [\App\Http\Controllers\Campaign\CampaignController::class, 'updateStatus']);
             Route::patch('/campaigns/{campaign}/location', [\App\Http\Controllers\Campaign\CampaignController::class, 'modifyLocation']);
             Route::patch('/campaigns/{campaign}/add-location', [\App\Http\Controllers\Campaign\CampaignController::class, 'addLocationToExistingCampaign']);
+            Route::patch('/campaigns/{campaign}/remove-location', [\App\Http\Controllers\Campaign\CampaignController::class, 'removeLocationFromExistingCampaign']);
+            Route::put('/resume-campaign/{campaign}', [\App\Http\Controllers\Campaign\CampaignController::class, 'resumeCampaign']);
         });
 
         Route::group(['prefix' => 'location', 'middleware' => ['IsProfileUpdated']], function () {
@@ -54,6 +56,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'payment'], function () {
             Route::post('/fund-campaign/{campaign}', [\App\Http\Controllers\Dashboard\PaymentController::class, 'fundCampaign']);
+            Route::get('/get-user-balance', [\App\Http\Controllers\Dashboard\PaymentController::class, 'getUserBalance']);
         });
 
         Route::post('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout']);

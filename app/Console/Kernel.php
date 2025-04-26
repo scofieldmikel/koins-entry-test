@@ -6,6 +6,7 @@ use App\Console\Commands\ChangeStatus;
 use App\Console\Commands\SendCampaign;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\DebitWalletForCampaign;
 use App\Console\Commands\NotifyCampaignCompletion;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         NotifyCampaignCompletion::class,
         ChangeStatus::class,
         SendCampaign::class,
+        DebitWalletForCampaign::class,
 
     ];
 
@@ -33,6 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('campaign-completion')->daily();
         $schedule->command('change-status')->daily();
         $schedule->command('send-campaign')->daily();
+        $schedule->command('debit-wallet')->daily('00:00');
     }
 
     /**
