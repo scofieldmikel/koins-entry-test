@@ -8,14 +8,19 @@ use App\Http\Traits\PaymentTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\TransactionTrait;
 use App\Http\Requests\FundCampaignRequest;
+use App\Traits\Helpers;
 
 class PaymentController extends Controller
 {
-    use TransactionTrait,PaymentTrait;
+    use TransactionTrait, PaymentTrait, Helpers;
 
     public function fundCampaign(Campaign $campaign, FundCampaignRequest $request)
     {
         $user = $request->user();
+        if($campaign->status != $this->fetchStatusId('Pending')) {
+            return $this->badRequestResponse('Campaign can not be funded.');
+        }
+
         $transaction = $this->saveTransaction($campaign->amount, $user, $campaign, 'Transfer', 'Campaign Fund', $campaign->id, 'Campaign Fund');
 
         $data = [
