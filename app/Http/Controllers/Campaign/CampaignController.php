@@ -124,6 +124,10 @@ class CampaignController extends Controller
             return $this->notFoundResponse('Campaign not found');
         }
 
+        if(! $campaign->user->is($request->user())) {
+            return $this->badRequestResponse('You are not authorized to add location to this campaign.');
+        }
+
         if($campaign->status == CampaignController::fetchStatusId('Pending')) {
             return $this->badRequestResponse('Campaign is still in pending! Kindly fund campaign.');
         }
@@ -163,6 +167,10 @@ class CampaignController extends Controller
             return $this->notFoundResponse('Campaign not found');
         }
 
+        if(! $campaign->user->is($request->user())) {
+            return $this->badRequestResponse('You are not authorized to add location to this campaign.');
+        }
+
         $attached = $campaign->locations()->where('locations.id', $request->location_id)->exists();
 
         if (! $attached) {
@@ -184,6 +192,10 @@ class CampaignController extends Controller
             return $this->notFoundResponse('Campaign not found');
         }
 
+        if(! $campaign->user->is($request->user())) {
+            return $this->badRequestResponse('You are not authorized to add location to this campaign.');
+        }
+
         $campaign->locations()->syncWithoutDetaching([
             $request->location_id => ['status' => $request->status],
         ]);
@@ -191,12 +203,16 @@ class CampaignController extends Controller
         return $this->okResponse('Location added successfully');
     }
 
-    public function resumeCampaign($campaign)
+    public function resumeCampaign($campaign, Request $request)
     {
         $campaign = Campaign::find($campaign);
 
         if (!$campaign) {
             return $this->notFoundResponse('Campaign not found');
+        }
+
+        if(! $campaign->user->is($request->user())) {
+            return $this->badRequestResponse('You are not authorized to add location to this campaign.');
         }
 
         if ($campaign->status == CampaignController::fetchStatusId('Pending')) {
