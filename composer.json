@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.2",
         "aws/aws-sdk-php": "^3.209",
+        "ext-gd": "*",
+        "ext-fileinfo": "*",
         "intervention/image": "^2.7",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
