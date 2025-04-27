@@ -135,10 +135,6 @@ class CampaignController extends Controller
             return $this->badRequestResponse('Campaign has already ended.');
         }
 
-        if ($campaign->status == CampaignController::fetchStatusId('Running')) {
-            return $this->badRequestResponse('Campaign is already running, you cannot update the status.');
-        }
-
         $request->validate([
             'status' => 'required|in:Pending,Stopped,Paused',
         ]);
