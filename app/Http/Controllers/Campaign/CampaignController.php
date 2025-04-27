@@ -124,6 +124,13 @@ class CampaignController extends Controller
             return $this->notFoundResponse('Campaign not found');
         }
 
+        if($campaign->status == CampaignController::fetchStatusId('Pending')) {
+            return $this->badRequestResponse('Campaign is still in pending! Kindly fund campaign.');
+        }
+        if($campaign->end_date < now()) {
+            return $this->badRequestResponse('Campaign has already ended.');
+        }
+
         if ($campaign->status == CampaignController::fetchStatusId('Running')) {
             return $this->badRequestResponse('Campaign is already running, you cannot update the status.');
         }
@@ -190,6 +197,10 @@ class CampaignController extends Controller
 
         if (!$campaign) {
             return $this->notFoundResponse('Campaign not found');
+        }
+
+        if ($campaign->status == CampaignController::fetchStatusId('Pending')) {
+            return $this->badRequestResponse('Campaign is still in pending! Kindly fund campaign.');
         }
 
         if ($campaign->status == CampaignController::fetchStatusId('Running')) {
